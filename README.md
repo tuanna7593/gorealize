@@ -1,5 +1,5 @@
 # Introduction
-Gorealize using for build base image for service development by Golang.
+Gorealize using for build docker base image for service development by Golang.
 It's purpose is use for performing Golang live reloading when development service by docker container.
 
 Gorealize using https://github.com/oxequa/realize package for perfom live reloading.
@@ -26,7 +26,32 @@ services:
     working_dir: /go/src/github.com/tuanna7593/go-project-prototype
     ports:
       - 3000:3000
-    depends_on:
-      - db
     container_name: app
+```
+
+In project `github.com/tuanna7593/go-project-prototype`, I just need to config `realize.yaml` file as below
+```
+settings:
+  legacy:
+    force: false
+    interval: 0s
+schema:
+- name: go-project-prototype
+  path: .
+  commands:
+    install:
+      status: true
+      method: go install -race
+    run:
+      status: true
+      method: /go/bin/go-project-prototype
+  watcher:
+    extensions:
+      - go
+    paths:
+      - /
+    ignored_paths:
+      - .git
+      - .realize
+      - vendor
 ```
